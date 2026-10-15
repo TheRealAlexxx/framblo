@@ -1,0 +1,7 @@
+import {ready,getCookie,clearCookie,encodeCookie,setCookie,json,gh,cookieNames,random} from '../../lib/github.js';
+export default async function handler(req,res){
+ if(req.method!=='GET')return json(res,405,{error:'Method not allowed'});
+ const state=getCookie(req,cookieNames.STATE_COOKIE);clearCookie(res,cookieNames.STATE_COOKIE);
+ if(!ready()||!state||Date.now()-state.created>600000||req.query.state!==state.state||!req.query.code)return res.redirect(302,'/#/editor?github=error');
+ try{const tokenRes=await fetch('https://github.com/login/oauth/access_token',{method:'POST',headers:{Accept:'application/json','Content-Type':'application/json'},body:JSON.stringify({client_id:process.env.GITHUB_CLIENT_ID,client_secret:process.env.GITHUB_CLIENT_SECRET,code:req.query.code,code_verifier:state.verifier,redirect_uri:(process.env.FRAMBLO_PUBLIC_URL||'https://framblo.vercel.app')+'/api/github/callback'}),signal:AbortSignal.timeout(15000)});const t=await tokenRes.json();if(!t.access_token)throw Error('OAuth denied');const user=await gh('/user',t.access_token);const session={login:user.login,id:user.id,token:t.access_token,refresh:t.refresh_token||null,expiresAt:t.expires_in?Date.now()+t.expires_in*1000:Date.now()+7*86400_000,refreshExpiresAt:t.refresh_token_expires_in?Date.now()+t.refresh_token_expires_in*1000:null,csrf:random()};setCookie(res,cookieNames.SESSION_COOKIE,encodeCookie(session));res.redirect(302,'/#/editor?github=connected');}catch{res.redirect(302,'/#/editor?github=error');}
+}

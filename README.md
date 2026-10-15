@@ -2,40 +2,48 @@
 
 **Build visually. Own your code.**
 
-Framblo is a free, local-first visual website builder. Start with a template, edit directly on the canvas, preview layouts at different screen widths, and export ordinary HTML, CSS, JavaScript, and images. No Framblo account or subscription required.
+Framblo is a free, open-source, local-first visual website builder. Start on a project dashboard, choose a template, edit sections visually and export portable HTML/CSS/JavaScript. No account or subscription is required for editing.
 
-## Try the alpha
-
-1. [Download the prebuilt editor](https://github.com/TheRealAlexxx/framblo/raw/refs/heads/main/dist/index.html).
-2. Open `index.html` in a modern desktop browser.
-3. For more reliable browser storage, serve the file from localhost instead of opening it as `file://`:
-
-```sh
-python -m http.server 4173 --directory dist
-```
-
-Then visit http://localhost:4173.
+**Live editor:** https://framblo.vercel.app
 
 ## Features
 
-- Visual section editing, inline text editing, and rearranging sections.
-- Four starter templates and a blank canvas.
-- Responsive desktop, tablet, and phone previews.
-- Undo/redo and local browser project storage.
-- Import/export of Framblo project backups (including legacy OpenCanvas backups).
-- Portable static website export with assets.
-- An optional GitHub publish workflow using a user's own GitHub credentials.
+- Dashboard with saved projects, getting-started information, and templates.
+- Visual responsive editor with sections, layers, page management, styling and assets.
+- Local browser storage: download project backups because clearing browser data deletes saved work.
+- Portable website ZIPs containing HTML, CSS, JavaScript and uploaded image assets.
+- Optional **Connect GitHub** publishing; **no personal access token fields**.
+
+## GitHub publishing
+
+Framblo uses a GitHub App and server-side OAuth authorization. Users authorize Framblo, choose a repository where the app is installed, and publish an exported snapshot to a new `framblo-...` branch. If permitted, Framblo offers to enable GitHub Pages, leaving unrelated sites untouched.
+
+To enable this feature, register a GitHub App with:
+- Homepage: `https://framblo.vercel.app`
+- Authorization callback: `https://framblo.vercel.app/api/github/callback`
+- Repository permissions: **Contents: Read and write**, **Metadata: Read-only**, **Pages: Read and write** (for Pages automation)
+- Expiring user authorization tokens enabled; no webhook needed
+- Installation availability: Any account
+
+In Vercel production environment variables, configure:
+- `GITHUB_CLIENT_ID`: the GitHub App's client ID
+- `GITHUB_CLIENT_SECRET`: secret
+- `FRAMBLO_SESSION_SECRET`: an independent cryptographically random secret of at least 32 characters
+- `GITHUB_APP_SLUG`: your GitHub App slug (recommended)
+- `FRAMBLO_PUBLIC_URL`: `https://framblo.vercel.app` (recommended)
+
+Never commit private keys or client secrets. A separate GitHub App keypair is not used by the current user-authorization backend. Test the complete authorization/publish flow using a disposable repository before relying on it.
 
 ## Deployment
 
-The checked-in alpha is a **static app** at `dist/index.html`. `vercel.json` sets `dist` as the output directory. In Vercel, import this GitHub repository and deploy with **Framework Preset: Other**. No build/install command or environment variables are needed for this prebuilt alpha.
+The `dist/index.html` file is a standalone compiled editor, served directly by Vercel. The six `api/github/*` serverless endpoints implement login, callback, session, repository selection, publishing and disconnect. `lib/github.js` supplies encrypted sessions and GitHub API helpers. `vercel.json` selects the `dist` output directory. Vercel deploys commits to `main` automatically.
 
-## Development status
+**Source note:** This GitHub release currently contains the built and editable HTML/JS/CSS editor plus its server-side source. The separate modular editor source and automated tests are available in the Framblo v1 source ZIP produced during development and are pending import into the repository.
 
-**0.1.0 alpha.** The repository currently contains the bundled browser editor, the licence, and deployment configuration. The modular development source and test suite from the source archive are not yet checked into this repository. The built HTML contains the editor's client-side JavaScript and CSS, but is less convenient to modify than the modular sources.
+## Privacy and limitations
 
-The development source archive was validated locally with 13 passing unit/integration tests and 31 browser interaction checks. These checks do not guarantee Safari/Firefox compatibility or long-term browser storage, so keep your editable project backups.
+Editing needs no login. Projects stay in this browser's IndexedDB, not in a Framblo cloud account. GitHub authentication uses a secure HttpOnly encrypted browser cookie; tokens are never requested from users as text or embedded in exported websites. Publishing has not yet been validated end-to-end with a real visitor account on this new release.
 
 ## Licence
 
-MIT. See [LICENSE](LICENSE).
+MIT — see [LICENSE](LICENSE).

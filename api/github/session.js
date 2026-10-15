@@ -1,0 +1,2 @@
+import {ready,refreshSession,err,json} from '../../lib/github.js';
+export default async function handler(req,res){if(req.method!=='GET')return json(res,405,{error:'Method not allowed'});if(!ready())return json(res,200,{configured:false,connected:false});try{const s=await refreshSession(req,res);return json(res,200,{configured:true,connected:!!s,login:s?.login||null,csrf:s?.csrf||null,install_url:process.env.GITHUB_APP_SLUG?'https://github.com/apps/'+encodeURIComponent(process.env.GITHUB_APP_SLUG)+'/installations/new':null});}catch(e){return err(res,e)}}
