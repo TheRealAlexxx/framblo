@@ -103,7 +103,7 @@ try {
   await page.locator('.rail [data-tab=layers]').click();
   assert.equal(await page.locator('.library.open').isVisible(),true);
   await page.locator('[data-action=close-library]').click();
-  await page.locator('[data-action=inspector]').click();
+  await page.locator('.canvas-toolbar [data-action=inspector]').click();
   assert.equal(await page.locator('#inspector.open').isVisible(),true);
   await page.keyboard.press('Escape');
   check('Editor panels open and close on a phone-sized viewport');
