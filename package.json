@@ -1,14 +1,14 @@
 {
   "name": "framblo",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "private": true,
-  "description": "Framblo visual website builder and GitHub App publisher",
+  "description": "A visual website builder. Your site, your code.",
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "node -e \"console.log('Using prebuilt Framblo editor')\""
+    "build": "node scripts/build.mjs && node --test tests/design.test.mjs",
+    "test": "node scripts/build.mjs && node --test tests/design.test.mjs",
+    "test:browser": "node tests/browser.mjs"
   },
-  "engines": {
-    "node": ">=20"
-  }
+  "engines": { "node": ">=20" }
 }

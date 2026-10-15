@@ -1,0 +1,40 @@
+<section id="dashboard" class="dashboard f-home" aria-label="Framblo home">
+  <a class="f-skip" href="#f-main">Skip to content</a>
+  <header class="f-header">
+    <div class="f-header-inner">
+      <a class="f-brand" href="#/home" aria-label="Framblo home"><span class="f-mark" aria-hidden="true"><svg viewBox="0 0 32 32" fill="none"><path d="M20 9c-6-1-8 3-8 8v9M8.5 17H21" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"/></svg></span>framblo<span class="f-brand-dot">.</span></a>
+      <nav class="f-nav" aria-label="Main navigation"><a href="#projects">Your projects</a><a href="#templates">Templates</a><a href="https://github.com/TheRealAlexxx/framblo" target="_blank" rel="noopener noreferrer">Source <span aria-hidden="true">↗</span></a></nav>
+      <button class="f-button f-button-small" data-dash-open-current>Open editor <span aria-hidden="true">↗</span></button>
+    </div>
+  </header>
+  <main id="f-main" class="f-main" tabindex="-1">
+    <section class="f-intro" aria-labelledby="f-headline">
+      <div class="f-intro-top"><span class="f-label"><span class="f-tick" aria-hidden="true"></span>A visual website builder</span><span class="f-intro-note">Free to use. Open source.</span></div>
+      <div class="f-intro-grid">
+        <h1 id="f-headline">Give your idea<br>its own <span>address.</span></h1>
+        <div class="f-intro-copy"><p>Start with a layout. Make every detail yours. Publish with GitHub, or take your website wherever you like.</p><div class="f-intro-actions"><button class="f-button f-button-pink" data-dash-new="blank">Create a website <span aria-hidden="true">↗</span></button><a class="f-text-link" href="#templates">Explore templates <span aria-hidden="true">↓</span></a></div><p class="f-fineprint">No account needed to start.</p></div>
+      </div>
+    </section>
+    <section class="f-showcase" aria-label="Explore starter websites">
+      <div class="f-showcase-toolbar"><div class="f-showcase-name"><span class="f-cross" aria-hidden="true">+</span><span>A starting point. Not a limit.</span></div><div class="f-demo-tabs" role="group" aria-label="Preview a template"><button type="button" data-demo="studio" aria-pressed="true">Studio</button><button type="button" data-demo="product" aria-pressed="false">Product</button><button type="button" data-demo="portfolio" aria-pressed="false">Portfolio</button></div></div>
+      <div class="f-preview-wrap"><div class="f-preview-aperture" data-featured-preview><iframe id="f-featured-frame" title="Studio starter website preview" tabindex="-1" aria-hidden="true" sandbox="" referrerpolicy="no-referrer"></iframe></div><span class="f-corner f-corner-tl" aria-hidden="true"></span><span class="f-corner f-corner-tr" aria-hidden="true"></span><span class="f-corner f-corner-bl" aria-hidden="true"></span><span class="f-corner f-corner-br" aria-hidden="true"></span></div>
+      <div class="f-showcase-caption"><p><strong id="f-demo-name">Studio</strong><span id="f-demo-description">A place for independent work.</span></p><button class="f-text-link" id="f-demo-use" data-dash-new="studio">Use this template <span aria-hidden="true">↗</span></button></div>
+    </section>
+    <div class="f-principles" aria-label="How Framblo works"><span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 3 6 17 3-7 7-3L4 3Z"/></svg>Edit directly on the page</span><span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M3 4h13v11H3zM8 15v5m-4 0h8M18 9h4v11h-4z"/></svg>Check every screen size</span><span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/></svg>Leave with your code</span></div>
+    <section id="projects" class="f-section f-projects" aria-labelledby="f-projects-title">
+      <div class="f-section-heading"><div><span class="f-label">On this device</span><h2 id="f-projects-title">Your workspace<span class="f-count" id="f-project-count" hidden></span></h2><p class="f-section-description">Saved in this browser. Keep a backup for other devices.</p></div><div class="f-section-actions"><button class="f-text-link" data-action="import-project">Import backup <span aria-hidden="true">↥</span></button><button class="f-button f-button-small" data-dash-new="blank"><span aria-hidden="true">+</span> New project</button></div></div>
+      <div id="dashboard-projects" class="f-project-grid" aria-live="polite"><div class="f-empty"><span class="f-loading-line">Loading your projects…</span></div></div>
+    </section>
+    <section id="templates" class="f-section f-templates" aria-labelledby="f-templates-title">
+      <div class="f-section-heading"><div><span class="f-label">A head start</span><h2 id="f-templates-title">A few ways in.</h2></div><p class="f-section-aside">Change the words, move the sections,<br>make something we didn't think of.</p></div>
+      <div class="f-template-grid">
+        <button class="f-template" data-dash-new="studio"><span class="f-template-preview" data-template-preview="studio"></span><span class="f-template-info"><span><strong>Studio</strong><small>Independent businesses &amp; creative work</small></span><span class="f-template-arrow" aria-hidden="true">↗</span></span></button>
+        <button class="f-template" data-dash-new="product"><span class="f-template-preview" data-template-preview="product"></span><span class="f-template-info"><span><strong>Product</strong><small>An introduction to your next release</small></span><span class="f-template-arrow" aria-hidden="true">↗</span></span></button>
+        <button class="f-template" data-dash-new="portfolio"><span class="f-template-preview" data-template-preview="portfolio"></span><span class="f-template-info"><span><strong>Portfolio</strong><small>Your work, with room to breathe</small></span><span class="f-template-arrow" aria-hidden="true">↗</span></span></button>
+      </div>
+      <button class="f-blank-start" data-dash-new="blank"><span class="f-blank-symbol" aria-hidden="true">+</span><span>Rather start from nothing?<small>Open a blank canvas.</small></span><span aria-hidden="true">↗</span></button>
+    </section>
+    <section class="f-ownership" aria-labelledby="f-ownership-title"><span class="f-label">A tool, not a lock-in</span><div class="f-ownership-grid"><h2 id="f-ownership-title">Made here.<br><span>At home anywhere.</span></h2><div><p>Your export is a real website: HTML, CSS, JavaScript and your images. Publish it to GitHub or host it somewhere else. It doesn't need Framblo to keep running.</p><a class="f-text-link" href="https://github.com/TheRealAlexxx/framblo" target="_blank" rel="noopener noreferrer">Look under the hood <span aria-hidden="true">↗</span></a></div></div><div class="f-file-strip" aria-label="Exported file types"><span>index.html</span><span>styles.css</span><span>script.js</span><span>assets/</span><span class="f-file-note">Your files. Your next move.</span></div></section>
+  </main>
+  <footer class="f-footer"><a class="f-brand" href="#/home">framblo<span class="f-brand-dot">.</span></a><span>A little more of you on the web.</span><div><a href="https://github.com/TheRealAlexxx/framblo/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">MIT licence ↗</a><span>© 2026 Framblo</span></div></footer>
+</section>
