@@ -12,7 +12,6 @@
   let epoch = 0;
   let limit = 6;
   let demo = 'studio';
-  const reducedMotion = () => matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function fitFrame(frame) {
     const host = frame.parentElement;
@@ -44,7 +43,9 @@
     frame.setAttribute('aria-hidden', 'true');
     frame.setAttribute('referrerpolicy', 'no-referrer');
     frame.tabIndex = -1;
-    frame.loading = existing ? 'eager' : 'lazy';
+    // These small srcdoc documents need no network request. Eager rendering
+    // avoids empty thumbnails after route changes or when scrolling quickly.
+    frame.loading = 'eager';
     frame.srcdoc = html;
     if (!existing) host.append(frame);
     frames.add(frame);
@@ -80,7 +81,6 @@
     try {
       const projects = (await window.OC.storage.list()).sort((a, b) => b.updatedAt - a.updatedAt);
       if (version !== epoch) return;
-      // Disconnect observers for replaced preview elements.
       container.querySelectorAll('.f-project-preview').forEach(host => resize.unobserve(host));
       const counter = document.querySelector('#f-project-count');
       counter.hidden = !projects.length;
@@ -103,7 +103,6 @@
     if (button.dataset.demo) selectDemo(button.dataset.demo);
     if (button.hasAttribute('data-more-projects')) { limit = Number.MAX_SAFE_INTEGER; renderProjects(); }
   });
-  // Restore measurements when returning from the editor, without touching stored work.
   addEventListener('hashchange', () => requestAnimationFrame(() => {
     for (const frame of frames) fitFrame(frame);
   }));
