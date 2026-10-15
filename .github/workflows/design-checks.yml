@@ -1,0 +1,31 @@
+name: Interface checks
+on:
+  push:
+    branches: [main, design/framblo-studio]
+  pull_request:
+    branches: [main]
+permissions:
+  contents: read
+jobs:
+  interface:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          persist-credentials: false
+      - name: Build and verify source invariants
+        run: npm run build
+      - name: Install isolated browser test tooling
+        run: |
+          npm install --prefix .qa --no-audit --no-fund --save-exact playwright@1.63.0
+          node .qa/node_modules/playwright/cli.js install --with-deps chromium
+      - name: Check the complete editor and dashboard flow
+        run: node tests/browser.mjs
+      - name: Save screenshots and results
+        if: always()
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: framblo-interface-checks
+          path: test-results/
+          retention-days: 7
