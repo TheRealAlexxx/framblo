@@ -11,7 +11,11 @@ export default async function handler(req,res){
  if(!paths.has('index.html')||!paths.has('styles.css')||!paths.has('script.js')||!paths.has('framblo.project.json'))throw Object.assign(new Error('Website is missing required files.'),{status:400});
  const allowedRepos=await accessibleRepos(session);if(!allowedRepos.some(r=>r.full_name.toLowerCase()===repository.toLowerCase()))throw Object.assign(new Error('This repository is not authorized for Framblo. Install the GitHub App for it first.'),{status:403});
  const path='/repos/'+repository.split('/').map(encodeURIComponent).join('/'),info=await gh(path,session.token);if(info.archived)throw Object.assign(new Error('This repository is archived.'),{status:409});
- const ref=await gh(path+'/git/ref/heads/'+encodeURIComponent(info.default_branch),session.token);const entries=[];
+ let ref;try{ref=await gh(path+'/git/ref/heads/'+encodeURIComponent(info.default_branch),session.token);}catch(e){if(!(e.status===409&&/empty/i.test(e.message)))throw e;
+  /* Brand-new empty repo: the Git Data API refuses everything until a first commit exists, so create one with the Contents API. */
+  await gh(path+'/contents/README.md',session.token,{method:'PUT',body:{message:'Initial commit',content:Buffer.from('# '+repository.split('/')[1]+'\n').toString('base64')}});
+  ref=await gh(path+'/git/ref/heads/'+encodeURIComponent(info.default_branch),session.token);}
+ const entries=[];
  for(const f of files){let sha;if(f.encoding==='base64'){const blob=await gh(path+'/git/blobs',session.token,{method:'POST',body:{content:f.data,encoding:'base64'}});sha=blob.sha;}
  if(sha)entries.push({path:f.name,mode:'100644',type:'blob',sha});else entries.push({path:f.name,mode:'100644',type:'blob',content:f.data});}
  const tree=await gh(path+'/git/trees',session.token,{method:'POST',body:{tree:entries}});const commit=await gh(path+'/git/commits',session.token,{method:'POST',body:{message:'Publish website with Framblo',tree:tree.sha,parents:[ref.object.sha]}});
