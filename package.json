@@ -6,8 +6,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
-    "build": "node scripts/build.mjs && node --test tests/design.test.mjs",
-    "test": "node scripts/build.mjs && node --test tests/design.test.mjs",
+    "build": "node scripts/build.mjs && node --test tests/design.test.mjs tests/publish.test.mjs",
+    "test": "node scripts/build.mjs && node --test tests/design.test.mjs tests/publish.test.mjs",
     "test:browser": "node tests/browser.mjs"
   },
   "engines": { "node": ">=20" }
