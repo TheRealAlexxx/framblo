@@ -520,9 +520,12 @@ async function createShareLink(){
  }catch(e){result.innerHTML=`<div class="publish-error" style="margin-top:14px">Could not create a preview link: ${E(e.message)}</div>`;}
 }
 async function copyShareLink(){
- const input=$('#share-url');if(!input)return;
+ const input=$('#share-url'),btn=document.querySelector('[data-action=copy-share-link]');if(!input)return;
  try{await navigator.clipboard.writeText(input.value);}catch{input.select();document.execCommand('copy');}
  toast('Link copied. Send it to anyone.');
+ if(!btn)return;
+ btn.disabled=true;btn.innerHTML=`${icon('check')} Copied`;
+ setTimeout(()=>{btn.disabled=false;btn.innerHTML=`${icon('copy')} Copy link`;},2000);
 }
 let viewerProject=null,viewerShow=null;
 async function renderViewer(token){
