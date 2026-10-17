@@ -1,69 +1,66 @@
 # Framblo
 
-**A visual website builder. Your site, your code.**
+**A free, open source website builder that gives you real code. Design visually, export ordinary HTML, CSS and JavaScript, host it anywhere.**
 
-[Open Framblo](https://framblo.vercel.app/) · [Source](https://github.com/TheRealAlexxx/framblo) · [MIT licence](LICENSE)
+![The Framblo homepage and a starter website preview](docs/screenshot.png)
 
-Start on the homepage, preview an actual starter website, and open the editor. Change sections, text, images and theme settings. Export ordinary HTML, CSS, JavaScript and assets, or connect GitHub to publish.
+## Quick start
 
-## Interface
+The fastest way to try Framblo is the hosted app: **[framblo.vercel.app](https://framblo.vercel.app/)**
 
-The interface uses a restrained ink-and-pink visual system, real website previews and a project workspace. The editor shares its navigation, typography and control styles with the homepage. There are no font CDN calls, required accounts or extra runtime dependencies for editing.
+1. Open the app. No account, no sign up.
+2. Pick a template or start blank.
+3. Click text to edit it, drag in new sections, change the theme.
+4. Export a ZIP of real website files, or connect GitHub and publish in one click.
 
-Projects stay in this browser's IndexedDB. Changing devices or clearing site data does not move your work with you. Keep JSON backups. Existing OpenCanvas/Framblo projects and the original local database are preserved.
+Your work saves automatically in your browser. Download a project backup (JSON) if you want to move between devices.
 
-## Build and test
+## Why Framblo
 
-Node.js 20 or later; no packages needed for the production app.
+- **You own the output.** Exports are plain HTML, CSS, JavaScript and images. Nothing depends on Framblo to keep running.
+- **Free and open source.** MIT licence, no paid tiers, no locked sections.
+- **Local first.** Editing works offline in your browser. Accounts are optional and only used for GitHub publishing.
+- **Real publishing.** Connect GitHub once and publish your site to your own repository, ready for GitHub Pages.
+
+## Run it locally
+
+Node.js 20 or later. No packages are needed for the app itself.
 
 ```sh
 npm run build
-npm test
 python -m http.server 4173 --directory dist
 ```
 
-Open http://localhost:4173. The build writes a self-contained `dist/index.html`, including styles and scripts, so it can also be opened directly. Serving localhost is preferable for reliable storage.
+Open http://localhost:4173.
 
-### Source map
+## Test
 
-- `src/editor.base.html`: the existing standalone editor engine, project model, render/export code, and storage implementation.
-- `ui/home.html`: semantic homepage and workspace markup.
-- `ui/framblo.css`: interface design system and responsive layouts. Does not affect exported websites.
-- `ui/enhance.js`: sandboxed real template previews and saved-project presentation.
-- `scripts/build.mjs`: deterministic assembly with checked replacement boundaries and JavaScript parsing.
-- `tests/design.test.mjs`: compatibility/build invariants.
-- `tests/browser.mjs`: real Chromium workflow checks, responsive measurements, exports, and IndexedDB persistence.
-- `api/github/` and `lib/github.js`: existing GitHub App user-authorization backend.
+```sh
+npm test            # build plus source invariant checks
+npm run test:browser  # full editor flow in real Chromium (see below)
+```
 
-Browser tests install a pinned Playwright version into `.qa/`, separate from the application. GitHub Actions runs the checks and stores screenshots as a short-lived artifact. To run locally:
+Browser tests install a pinned Playwright into `.qa/`, separate from the app:
 
 ```sh
 npm install --prefix .qa --no-audit --no-fund --save-exact playwright@1.63.0
 node .qa/node_modules/playwright/cli.js install --with-deps chromium
-npm run build
 npm run test:browser
 ```
 
-`dist/` is generated rather than committed. The original editor is preserved as source; the larger modular development archive from the first build has not yet been imported. Do not mistake the new UI test suite for a full security or cross-browser audit.
+## How it fits together
 
-## GitHub publishing
+- `src/editor.base.html`: the editor engine, project model, render/export code and storage.
+- `ui/home.html`, `ui/framblo.css`, `ui/enhance.js`: the homepage, workspace and design system.
+- `scripts/build.mjs`: assembles the self-contained `dist/index.html` that Vercel serves.
+- `api/github/` and `lib/github.js`: the GitHub App backend used for one click publishing.
 
-Users authorize the Framblo GitHub App, choose an installed repository, and publish to a new `framblo-...` branch. No personal-access-token input is required. The UI redesign does not change the publishing backend or its credentials.
+## Maintainer notes
 
-Maintainer setup:
+Deployments run on Vercel (`npm run build`, output `dist`, `api/github` as Node.js functions). Production needs these environment variables: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `FRAMBLO_SESSION_SECRET`, `GITHUB_APP_SLUG`, `FRAMBLO_PUBLIC_URL`.
 
-- GitHub App homepage: `https://framblo.vercel.app`
-- Callback: `https://framblo.vercel.app/api/github/callback`
-- Repository permissions: Contents read/write, Metadata read-only; Pages read/write for Pages setup.
-- Expiring user authorization tokens; installable on any account; no webhook required.
-- Vercel production variables: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `FRAMBLO_SESSION_SECRET`, `GITHUB_APP_SLUG`, `FRAMBLO_PUBLIC_URL`.
-
-Keep secrets out of GitHub and browser code. Session and client secrets belong only in Vercel's server-side secret variables. Editing/export works without GitHub configuration. The static local test server does not provide OAuth endpoints; the browser test mocks only the unconfigured-session response. A real OAuth/publish test still requires a consenting GitHub user and a test repository.
-
-## Deployment
-
-Vercel builds commits using `npm run build`, serves `dist`, and runs `api/github` as Node.js functions. Preview branches are for design checks; `main` is production. Existing GitHub App variables and application data must remain unchanged during interface updates.
+Secrets live only in Vercel's server side variables, never in the repo or browser code. Editing and exporting work with no GitHub configuration at all.
 
 ## Licence
 
-MIT. You are responsible for the content and images in websites you publish.
+[MIT](LICENSE). You are responsible for the content and images in websites you publish.
