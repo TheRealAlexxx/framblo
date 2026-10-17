@@ -57,7 +57,11 @@ npm run test:browser
 
 ## Maintainer notes
 
-Deployments run on Vercel (`npm run build`, output `dist`, `api/github` as Node.js functions). Production needs these environment variables: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `FRAMBLO_SESSION_SECRET`, `GITHUB_APP_SLUG`, `FRAMBLO_PUBLIC_URL`.
+Deployments run on Vercel (`npm run build`, output `dist`, `api/github` as Node.js functions).
+
+### GitHub App setup
+
+Production needs these environment variables: `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`, `FRAMBLO_SESSION_SECRET`, `GITHUB_APP_SLUG`, `FRAMBLO_PUBLIC_URL`.
 
 Secrets live only in Vercel's server side variables, never in the repo or browser code. Editing and exporting work with no GitHub configuration at all.
 
