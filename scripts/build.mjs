@@ -53,7 +53,7 @@ for (const required of ['id="canvas"','id="dashboard-projects"','id="project-imp
 }
 await fs.mkdir(path.join(root, 'dist'), { recursive: true });
 await fs.writeFile(path.join(root, 'dist/index.html'), html);
-for (const asset of ['robots.txt', 'sitemap.xml', 'og.png']) {
+for (const asset of ['robots.txt', 'sitemap.xml', 'og.png', 'favicon.ico']) {
   await fs.copyFile(path.join(root, 'ui', asset), path.join(root, 'dist', asset));
 }
 console.log(`Built Framblo interface: ${Buffer.byteLength(html)} bytes; ${scripts.length} JavaScript blocks parsed.`);
