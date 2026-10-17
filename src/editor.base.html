@@ -527,6 +527,9 @@ async function copyShareLink(){
  btn.disabled=true;btn.innerHTML=`${icon('check')} Copied`;
  setTimeout(()=>{btn.disabled=false;btn.innerHTML=`${icon('copy')} Copy link`;},2000);
 }
+function deflateRawSupported(){
+ try{return typeof CompressionStream!=='undefined'&&typeof DecompressionStream!=='undefined'&&!!new CompressionStream('deflate-raw')&&!!new DecompressionStream('deflate-raw');}catch{return false;}
+}
 let viewerProject=null,viewerShow=null;
 async function renderViewer(token){
  const viewer=$('#viewer'),frame=$('#viewer-frame');
@@ -540,12 +543,15 @@ async function renderViewer(token){
   pagesBox.innerHTML=project.pages.length>1?project.pages.map((pg,i)=>`<button type="button" data-viewer-page="${i}" class="${i===0?'active':''}">${E(pg.title||pg.slug)}</button>`).join(''):'';
   viewerShow=i=>{frame.setAttribute('sandbox','allow-scripts');frame.srcdoc=OC.documentHTML(project,project.pages[i]);pagesBox.querySelectorAll('button').forEach((b,j)=>b.classList.toggle('active',j===i));};
   viewerShow(0);
- }catch{
+ }catch(e){
+  console.error('Framblo preview failed to load:',e);
   viewerProject=null;viewerShow=null;
   document.title='Framblo preview';
   $('#viewer-title').textContent='';$('#viewer-pages').innerHTML='';
   frame.removeAttribute('sandbox');
-  frame.srcdoc='<!doctype html><html><body style="margin:0;display:grid;place-items:center;min-height:100vh;font-family:sans-serif;background:#faf8f5;color:#242324"><div style="text-align:center;max-width:340px;padding:20px"><h1 style="font-size:20px;margin:0 0 10px">This preview link is incomplete or damaged.</h1><p style="font-size:13px;line-height:1.7;color:#6b6c72;margin:0">Ask for a fresh link, or make your own website with Framblo.</p></div></body></html>';
+  frame.srcdoc=deflateRawSupported()
+   ?'<!doctype html><html><body style="margin:0;display:grid;place-items:center;min-height:100vh;font-family:sans-serif;background:#faf8f5;color:#242324"><div style="text-align:center;max-width:340px;padding:20px"><h1 style="font-size:20px;margin:0 0 10px">This preview link is incomplete or damaged.</h1><p style="font-size:13px;line-height:1.7;color:#6b6c72;margin:0">Ask for a fresh link, or make your own website with Framblo.</p></div></body></html>'
+   :'<!doctype html><html><body style="margin:0;display:grid;place-items:center;min-height:100vh;font-family:sans-serif;background:#faf8f5;color:#242324"><div style="text-align:center;max-width:340px;padding:20px"><h1 style="font-size:20px;margin:0 0 10px">This browser is too old for preview links.</h1><p style="font-size:13px;line-height:1.7;color:#6b6c72;margin:0">Open the link in the latest Chrome, Edge, Firefox, or Safari.</p></div></body></html>';
  }
 }
 async function init(){icons();let saved=null;try{const id=await OC.storage.getCurrent();saved=id?await OC.storage.get(id):null;p=saved?OC.normalizeProject(saved):OC.createProject();savedStamp=saved?(saved.updatedAt||0):null;status('Saved on this device');}catch{p=OC.createProject();status('Storage unavailable','error');}history=new OC.History(p);pageId=p.pages[0].id;selected=page().blocks.find(b=>b.type==='hero')?.id||page().blocks[0]?.id||'';renderAll();if(saved)enqueueSave();else status('Start a project');OC.getProject=()=>OC.clone(p);OC.getState=()=>({pageId,selected,tab,preview,device});changeRoute();}
