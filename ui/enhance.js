@@ -4,7 +4,8 @@
   const templateCopy = {
     studio: ['Studio', 'A place for independent work.'],
     product: ['Product', 'Give your next release a home.'],
-    portfolio: ['Portfolio', 'Let your work do the talking.']
+    portfolio: ['Portfolio', 'Let your work do the talking.'],
+    cafe: ['Cafe', 'Fresh coffee, baked daily.']
   };
   const frames = new Set();
   const previews = new Map();
