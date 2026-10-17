@@ -121,6 +121,14 @@ try {
   const shareUrl=await page.locator('#share-url').inputValue();
   assert.ok(shareUrl.includes('/#/view/'),shareUrl.slice(0,80));
   check('Preview link is created from the export dialog');
+  await context.grantPermissions(['clipboard-read','clipboard-write']);
+  await page.locator('[data-action=copy-share-link]').click();
+  await page.waitForFunction(()=>document.querySelector('[data-action=copy-share-link]')?.textContent.includes('Copied'));
+  assert.equal(await page.locator('[data-action=copy-share-link]').isDisabled(),true);
+  check('Copy link button confirms the copy');
+  await page.screenshot({path:'test-results/copy-link-confirmed.png'});
+  await page.waitForFunction(()=>{const b=document.querySelector('[data-action=copy-share-link]');return b?.textContent.includes('Copy link')&&!b.disabled;});
+  check('Copy link button resets after the confirmation');
   const shared=await context.newPage();
   await shared.goto(shareUrl,{waitUntil:'networkidle'});
   await shared.locator('#viewer:not([hidden])').waitFor();
