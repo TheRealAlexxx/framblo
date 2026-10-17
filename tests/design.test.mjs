@@ -48,3 +48,15 @@ test('no account, font CDN or new runtime dependency is introduced',()=>{
   assert.ok(!css.includes('@import'));
   assert.ok(!html.includes('fonts.googleapis.com'));
 });
+
+test('social, search and sharing metadata ship with the build',async()=>{
+  for(const needle of ['property="og:title"','property="og:image" content="https://framblo.vercel.app/og.png"','name="twitter:card" content="summary_large_image"','rel="canonical" href="https://framblo.vercel.app/"']){
+    assert.ok(html.includes(needle),needle);
+  }
+  const robots=await fs.readFile('dist/robots.txt','utf8');
+  assert.ok(robots.includes('Sitemap: https://framblo.vercel.app/sitemap.xml'));
+  const sitemap=await fs.readFile('dist/sitemap.xml','utf8');
+  assert.ok(sitemap.includes('<loc>https://framblo.vercel.app/</loc>'));
+  const og=await fs.readFile('dist/og.png');
+  assert.equal(og.subarray(1,4).toString(),'PNG');
+});
