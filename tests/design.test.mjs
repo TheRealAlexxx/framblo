@@ -59,4 +59,6 @@ test('social, search and sharing metadata ship with the build',async()=>{
   assert.ok(sitemap.includes('<loc>https://framblo.vercel.app/</loc>'));
   const og=await fs.readFile('dist/og.png');
   assert.equal(og.subarray(1,4).toString(),'PNG');
+  const favicon=await fs.readFile('dist/favicon.ico');
+  assert.deepEqual([...favicon.subarray(0,4)],[0,0,1,0]);
 });
