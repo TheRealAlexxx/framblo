@@ -9,7 +9,7 @@
 The fastest way to try Framblo is the hosted app: **[framblo.vercel.app](https://framblo.vercel.app/)**
 
 1. Open the app. No account, no sign up.
-2. Pick a template or start blank.
+2. Pick a template (Studio, Product, Portfolio, Cafe or Event) or start blank.
 3. Click text to edit it, drag in new sections, change the theme.
 4. Export a ZIP of real website files, or connect GitHub and publish in one click.
 
