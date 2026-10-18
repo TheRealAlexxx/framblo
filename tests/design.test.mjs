@@ -30,7 +30,11 @@ test('GitHub publishing remains token-free and unchanged',()=>{
   assert.ok(html.includes("if(form.id==='github-form'){await publishConnected(form);return;}"));
 });
 test('all inline JavaScript parses',()=>{
-  for(const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)) new vm.Script(match[1]);
+  for(const match of html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)){
+    if(/application\/ld\+json/i.test(match[0])){JSON.parse(match[1]);continue;}
+    new vm.Script(match[1]);
+  }
+  assert.ok(html.includes('"@type":"SoftwareApplication"'));
 });
 test('preview snapshots use the actual template engine with restricted frames',()=>{
   assert.ok(enhancement.includes('window.OC.documentHTML(project, project.pages[0])'));
