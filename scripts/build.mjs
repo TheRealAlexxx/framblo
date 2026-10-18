@@ -47,7 +47,10 @@ if (bodyEnd < 0 || html.slice(bodyEnd + 14).trim()) throw Error('Outer body boun
 html = html.slice(0, bodyEnd) + '<script id="framblo-interface-script">\n' + enhancement + '\n</script>\n' + html.slice(bodyEnd);
 const scripts = [...html.matchAll(/<script\b[^>]*>([\s\S]*?)<\/script\s*>/gi)];
 if (scripts.length < 2) throw Error('Missing application scripts.');
-for (let i = 0; i < scripts.length; i++) new vm.Script(scripts[i][1], { filename: `inline-${i}.js` });
+for (let i = 0; i < scripts.length; i++) {
+  if (/type=["']application\/ld\+json["']/i.test(scripts[i][0])) { JSON.parse(scripts[i][1]); continue; }
+  new vm.Script(scripts[i][1], { filename: `inline-${i}.js` });
+}
 for (const required of ['id="canvas"','id="dashboard-projects"','id="project-import"','/api/github/start','const DB=\'opencanvas-v1\'']) {
   if (!html.includes(required)) throw Error('Required compatibility marker missing: ' + required);
 }
