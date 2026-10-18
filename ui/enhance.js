@@ -5,7 +5,8 @@
     studio: ['Studio', 'A place for independent work.'],
     product: ['Product', 'Give your next release a home.'],
     portfolio: ['Portfolio', 'Let your work do the talking.'],
-    cafe: ['Cafe', 'Fresh coffee, baked daily.']
+    cafe: ['Cafe', 'Fresh coffee, baked daily.'],
+    event: ['Event', 'Give your night a home.']
   };
   const frames = new Set();
   const previews = new Map();
